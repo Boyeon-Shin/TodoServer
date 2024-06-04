@@ -1,4 +1,5 @@
 import {TodoData} from './todo.data.js';
+import todoRouter from "./todo.router.js";
 
 const findAll = () => {
     return TodoData.todoData;
@@ -17,21 +18,25 @@ const add = (todo) => {
     return newTodo;
 };
 
-const update = (id) => {
-
+const update = (id, isDone) => {
     const index = findIndexById(Number(id));
     if (index === -1) {
         return {};
     }
+    //
+    // const updated = {
+    //     ...TodoData.todoData[index],
+    //     isDone: isDone,
+    // }
 
-    const updated = {
-        id,
-        ...todo,
+    // TodoData.todoData[index] = updated;
+
+    TodoData.todoData[index].isDone = isDone;
+    console.log(TodoData.todoData);
+    // return update;
     };
 
-    TodoData.todoData[index] = updated;
-    return updated;
-};
+ // };
 
 
 const remove = (id) => {

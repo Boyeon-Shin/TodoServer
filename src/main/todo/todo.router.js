@@ -18,7 +18,9 @@ router.post('/', (req, res) => {
 
 router.patch('/:id', (req,res) => {
     const id = req.params.id;
-    return TodoHandler.update(id);
+    const isDone = req.body.isDone;
+    console.log(TodoData.todoData[id]);
+    return TodoHandler.update(id, isDone);
 })
 
 router.delete('/:id', (req, res) => {

@@ -2,31 +2,33 @@ import { RdbmsConfig } from "../configure/rdbms.config.js";
 import { TodoData } from "./todo.data.js";
 
 
-const findAll = () => {
+const findAll = async () => {
     const query = "SELECT * FROM todo";
-    return RdbmsConfig.allQuery(query);
+    const result = await RdbmsConfig.allQuery(query);
+    console.log(result);
+    return result;
 };
 
-const findById = (id) => {
+const findById = async (id) => {
     const query = `SELECT * FROM todo WHERE id = ${id}`;
-    return RdbmsConfig.getQuery(query);
+    return await RdbmsConfig.getQuery(query);
 };
 
-const add = (todo) => {
+const add = async (todo) => {
     const query = `INSERT INTO todo(isDone, content)
           VALUES ('${todo.isDone}', '${todo.content}') RETURNING *`;
-    return RdbmsConfig.getQuery(query);
+    return await RdbmsConfig.getQuery(query);
 };
 
-const update = (id, todo) => {
+const update = async (id, todo) => {
     const query = `UPDATE todo SET isDone='${todo.isDone}'
                 WHERE id = ${id} RETURNING *`;
-    return RdbmsConfig.getQuery(query);
+    return await RdbmsConfig.getQuery(query);
 };
 
-const remove = (id) => {
+const remove = async (id) => {
     const query = `DELETE FROM todo WHERE id = '${id}' RETURNING *`;
-    return RdbmsConfig.getQuery(query);
+    return await RdbmsConfig.getQuery(query, [id]);
 };
 
 const findIndexById = (id) => {

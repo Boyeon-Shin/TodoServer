@@ -9,7 +9,7 @@ import cors from "cors";
 import {TodoData} from "./todo/todo.data.js";
 import {RdbmsConfig} from "./configure/rdbms.config.js";
 
-TodoData.initialize();
+// TodoData.initialize();
 RdbmsConfig.initialize();
 
 const app = express();

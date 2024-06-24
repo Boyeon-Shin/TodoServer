@@ -12,7 +12,7 @@ const close = () => promisify(rdbms.close.bind(rdbms));
 const createTable = () => {
     return `CREATE TABLE IF NOT EXISTS todo (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
-        isDone BOOLEAN,
+        isDone BOOLEAN NOT NULL,
         content text,
         createdDate DATETIME DEFAULT CURRENT_TIMESTAMP
     )`;

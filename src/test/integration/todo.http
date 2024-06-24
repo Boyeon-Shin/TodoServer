@@ -1,5 +1,5 @@
 ### 전체조회
-GET https://{{host}}:{{port}}/todos
+GET https://{{host}}:{{port}}/todo
 Accept: application/json
 
 > {%
@@ -20,7 +20,7 @@ Accept: application/json
 
     client.test("Response body should be contain 'Fist todo'", () => {
         const expected = JSON.stringify({
-            id: 1, title: "First Todo", status: "pending"
+            id: 1, isDone: 0 , content:"nodejs 공부하기"
         });
 
         const actual = JSON.stringify(response.body[0]);
@@ -39,7 +39,7 @@ Accept: application/json
 %}
 
 ### 단건조회
-GET https://{{host}}:{{port}}/todos/1
+GET https://{{host}}:{{port}}/todo/1
 Accept: application/json
 
 > {%
@@ -70,7 +70,7 @@ Accept: application/json
 %}
 
 ### 새로운 TODO 등록
-POST https://{{host}}:{{port}}/todos
+POST https://{{host}}:{{port}}/todo
 Accept: application/json
 Content-Type: application/json
 

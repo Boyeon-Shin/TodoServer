@@ -1,35 +1,83 @@
-import sqlite3 from 'sqlite3';
-import { promisify } from 'util';
+import mysql from "mysql2/promise";
 
-let rdbms = new sqlite3.Database(':memory:');
+let connection;
 
-const getQuery = (query) => promisify(rdbms.get.bind(rdbms))(query);
-const allQuery = (query) => promisify(rdbms.all.bind(rdbms))(query);
-const runCommand = (query) => promisify(rdbms.run.bind(rdbms))(query);
-const close = () => promisify(rdbms.close.bind(rdbms));
+const openConnection = async () => {
+    try {
+        connection = await mysql.createPool({
+            host: 'wisoft.io',
+            user: 'boyeon',
+            password: 'ds35303530',
+            database: 'boyeon',
+            port: 10009
+        });
+        console.log('MySQL connected.');
+    } catch (error) {
+        console.error('안됨:', error);
+        throw error;
+    }
+};
 
+const runCommand = async (query, params = []) => {
+    try {
+        const [rows, fields] = await connection.query(query, params);
+        return rows;
+    } catch (error) {
+        console.error('Error executing query:', error);
+        throw error;
+    }
+};
+
+const allQuery = async (query) => {
+    try {
+        const [rows] = await connection.query(query);
+        return rows;
+    } catch (error) {
+        console.error('Error executing query:', error);
+        throw error;
+    }
+};
+
+const getQuery = async (query, params = []) => {
+    try {
+        const [rows, fields] = await connection.query(query, params);
+        return rows[0];
+    } catch (error) {
+        console.error('Error executing query:', error);
+        throw error;
+    }
+};
+
+const close = async () => {
+    if (connection) {
+        connection.end();
+        console.log('MySQL connection closed.');
+    }
+};
 
 const createTable = () => {
     return `CREATE TABLE IF NOT EXISTS todo (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        isDone BOOLEAN NOT NULL,
-        content text,
+        id INT AUTO_INCREMENT PRIMARY KEY,
+        isDone TINYINT NOT NULL,
+        content text NOT NULL,
         createdDate DATETIME DEFAULT CURRENT_TIMESTAMP
     )`;
 };
 
 const insertDummy = () => {
     return `INSERT INTO todo (isDone, content)
-        VALUES (0, 'nodejs 공부하기'),
-        (0, 'React 공부하기1'),
-        (0, 'React 공부하기2'),
-        (0, 'React 공부하기3'),
-        (0, 'React 공부하기4')`;
+        VALUES 
+            (0, 'nodejs 공부하기'),
+            (0, 'React 공부하기1'),
+            (0, 'React 공부하기2'),
+            (0, 'React 공부하기3'),
+            (0, 'React 공부하기4')`;
 };
 
 const initialize = async () => {
-    await runCommand(createTable());
-    await  runCommand(insertDummy());
+        await openConnection();
+        await runCommand(createTable());
+        await runCommand(insertDummy());
 };
 
 export const RdbmsConfig = {
@@ -37,8 +85,6 @@ export const RdbmsConfig = {
     initialize,
     getQuery,
     allQuery,
-    runCommand
+    runCommand,
+    openConnection
 };
-
-
-

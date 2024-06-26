@@ -16,19 +16,19 @@ const findById = async (id) => {
 
 const add = async (todo) => {
     const query = `INSERT INTO todo(isDone, content)
-          VALUES ('${todo.isDone}', '${todo.content}') RETURNING *`;
+          VALUES ('${todo.isDone}', '${todo.content}')`;
     return await RdbmsConfig.getQuery(query);
 };
 
 const update = async (id, todo) => {
-    const query = `UPDATE todo SET isDone='${todo.isDone}'
-                WHERE id = ${id} RETURNING *`;
+    const query = `UPDATE todo SET isDone='${todo.isDone }'
+                WHERE id = ${id}`;
     return await RdbmsConfig.getQuery(query);
 };
 
 const remove = async (id) => {
-    const query = `DELETE FROM todo WHERE id = '${id}' RETURNING *`;
-    return await RdbmsConfig.getQuery(query, [id]);
+    const query = `DELETE FROM todo WHERE id = '${id}'`;
+    return await RdbmsConfig.getQuery(query);
 };
 
 const findIndexById = (id) => {

@@ -1,22 +1,17 @@
 import mysql from "mysql2/promise";
-
 let connection;
 
-const openConnection = async () => {
-    try {
-        connection = await mysql.createPool({
-            host: 'wisoft.io',
-            user: 'boyeon',
-            password: 'ds35303530',
-            database: 'boyeon',
-            port: 10009
-        });
-        console.log('MySQL connected.');
-    } catch (error) {
-        console.error('안됨:', error);
-        throw error;
-    }
-};
+try {
+     connection = await mysql.createConnection({
+        host: 'wisoft.io',
+        user: 'boyeon',
+        password: 'ds35303530',
+        database: 'boyeon',
+        port: 10009,
+    });
+} catch (err) {
+    console.log(err);
+}
 
 const runCommand = async (query, params = []) => {
     try {
@@ -75,9 +70,8 @@ const insertDummy = () => {
 };
 
 const initialize = async () => {
-        await openConnection();
-        await runCommand(createTable());
-        await runCommand(insertDummy());
+    await runCommand(createTable());
+    await runCommand(insertDummy());
 };
 
 export const RdbmsConfig = {
@@ -86,5 +80,4 @@ export const RdbmsConfig = {
     getQuery,
     allQuery,
     runCommand,
-    openConnection
 };
